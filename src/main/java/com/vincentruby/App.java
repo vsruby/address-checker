@@ -1,6 +1,5 @@
 package com.vincentruby;
 
-import com.google.common.io.Resources;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVReaderBuilder;
 import com.vincentruby.client.AddressValidatorClient;
