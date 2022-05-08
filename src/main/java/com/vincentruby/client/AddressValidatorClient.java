@@ -32,6 +32,7 @@ public class AddressValidatorClient {
         List<NameValuePair> input = new ArrayList<>();
         input.add(new BasicNameValuePair("StreetAddress", address.getStreetAddress()));
         input.add(new BasicNameValuePair("City", address.getCity()));
+        input.add(new BasicNameValuePair("CountryCode", "US"));
         input.add(new BasicNameValuePair("PostalCode", address.getPostalCode()));
         input.add(new BasicNameValuePair("APIKey", apiKey));
 
@@ -47,13 +48,14 @@ public class AddressValidatorClient {
         JSONObject jsonObject = (JSONObject) obj;
 
         String status = (String) jsonObject.get("status");
-        if (status.equalsIgnoreCase("VALID")) {
-            String formattedAddress = (String) jsonObject.get("formattedaddress");
-            // do stuff
-        } else {
+        if (status.equalsIgnoreCase("INVALID")) {
             return new InvalidAddress();
+        } else {
+            return CorrectedAddress.builder()
+                    .streetAddress(jsonObject.get("streetnumber") + " " + jsonObject.get("street"))
+                    .city((String) jsonObject.get("city"))
+                    .postalCode((String) jsonObject.get("postalcode"))
+                    .build();
         }
-
-        return new InvalidAddress();
     }
 }
