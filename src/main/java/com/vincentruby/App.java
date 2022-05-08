@@ -21,7 +21,8 @@ public class App {
     private static final String API_KEY_ENV = "ADDRESS_VERIFICATION_API_KEY";
 
     public static void main(String[] args) {
-        AddressValidatorConfiguration configuration = addressValidatorConfiguration();
+        Dotenv dotenv = loadEnv();
+        AddressValidatorConfiguration configuration = addressValidatorConfiguration(dotenv);
         AddressValidatorClient validatorClient = addressValidatorClient(configuration);
         CheckerService checkerService = checkerService(validatorClient);
 
@@ -39,9 +40,7 @@ public class App {
         System.out.println("Finished address checking.");
     }
 
-    private static AddressValidatorConfiguration addressValidatorConfiguration() {
-        Dotenv dotenv = Dotenv.load();
-
+    private static AddressValidatorConfiguration addressValidatorConfiguration(Dotenv dotenv) {
         return new AddressValidatorConfiguration(dotenv.get(API_KEY_ENV));
     }
 
@@ -62,10 +61,14 @@ public class App {
                 .build();
     }
 
+    private static Dotenv loadEnv() {
+        return Dotenv.load();
+    }
+
     private static List<Address> readAddresses() {
         List<List<String>> raw = new ArrayList<>();
         try (CSVReader csvReader = csvReader()) {
-            String[] values = null;
+            String[] values;
             while ((values = csvReader.readNext()) != null) {
                 raw.add(Arrays.asList(values));
             }
