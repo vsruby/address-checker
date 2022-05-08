@@ -16,7 +16,7 @@ public class AddressValidatorCheckerService implements CheckerService {
 
     @Override
     public Address check(Address address) throws Exception {
-        return null;
+        return client.check(address);
     }
 
     @Override
