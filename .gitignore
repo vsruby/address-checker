@@ -2,3 +2,6 @@
 .idea/
 target/
 *.iml
+
+src/main/resources/csvs/*
+!src/main/resources/csvs/addresses.csv
