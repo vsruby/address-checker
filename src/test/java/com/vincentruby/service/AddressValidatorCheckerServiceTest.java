@@ -4,6 +4,7 @@ import com.vincentruby.client.AddressValidatorClient;
 import com.vincentruby.contract.dto.Address;
 import com.vincentruby.dto.CorrectedAddress;
 import com.vincentruby.dto.InitialAddress;
+import com.vincentruby.dto.InvalidAddress;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -82,5 +83,24 @@ public class AddressValidatorCheckerServiceTest {
         assertEquals(1, addresses.size());
         assertEquals(initialAddress, addresses.entrySet().stream().findFirst().get().getKey());
         assertEquals(correctedAddress, addresses.entrySet().stream().findFirst().get().getValue());
+    }
+
+    @Test
+    public void itShouldCallToTheClientAndStillHandleInvalidAddress() throws Exception {
+        String initialStreetAddress = "123 e Maine Street";
+        String initialCity = "Columbus";
+        String initialPostalCode = "43215";
+
+        Address initialAddress = InitialAddress.builder()
+                .city(initialCity)
+                .postalCode(initialPostalCode)
+                .streetAddress(initialStreetAddress)
+                .build();
+
+        Address invalidAddress = new InvalidAddress();
+
+        Mockito.when(mockClient.check(initialAddress)).thenReturn(invalidAddress);
+
+        assertEquals(invalidAddress, service.check(initialAddress));
     }
 }
