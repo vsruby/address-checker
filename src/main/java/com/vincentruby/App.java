@@ -21,23 +21,26 @@ public class App {
     private static final String API_KEY_ENV = "ADDRESS_VERIFICATION_API_KEY";
 
     public static void main(String[] args) {
+        // setup
         Dotenv dotenv = loadEnv();
         AddressValidatorConfiguration configuration = addressValidatorConfiguration(dotenv);
         AddressValidatorClient validatorClient = addressValidatorClient(configuration);
         CheckerService checkerService = checkerService(validatorClient);
 
+        // read in addresses from csv
         List<Address> addresses = readAddresses();
 
-        System.out.println("Beginning address checking...");
-
-        try {
-            Map<Address, Address> results = checkerService.checkAll(addresses);
-            results.forEach((key, value) -> System.out.println(key + " -> " + value));
-        } catch (Exception exception) {
-            throw new RuntimeException(exception);
+        // run address checks
+        if (!addresses.isEmpty()) {
+            try {
+                Map<Address, Address> results = checkerService.checkAll(addresses);
+                results.forEach((key, value) -> System.out.println(key + " -> " + value));
+            } catch (Exception exception) {
+                throw new RuntimeException(exception);
+            }
+        } else {
+            System.out.println("There were no addresses provided...");
         }
-
-        System.out.println("Finished address checking.");
     }
 
     private static AddressValidatorConfiguration addressValidatorConfiguration(Dotenv dotenv) {
