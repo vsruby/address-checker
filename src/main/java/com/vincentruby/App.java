@@ -26,26 +26,7 @@ public class App {
         AddressValidatorClient validatorClient = addressValidatorClient(configuration);
         CheckerService checkerService = checkerService(validatorClient);
 
-        List<List<String>> raw = new ArrayList<>();
-        try (CSVReader csvReader = csvReader()) {
-            String[] values = null;
-            while ((values = csvReader.readNext()) != null) {
-                raw.add(Arrays.asList(values));
-            }
-        } catch (IOException exception) {
-            throw new RuntimeException(exception);
-        }
-
-        List<Address> addresses = new ArrayList<>();
-        raw.forEach(item -> {
-            Address address = InitialAddress.builder()
-                    .streetAddress(item.get(0))
-                    .city(item.get(1))
-                    .postalCode(item.get(2))
-                    .build();
-
-            addresses.add(address);
-        });
+        List<Address> addresses = readAddresses();
 
         System.out.println("Beginning address checking...");
 
@@ -80,5 +61,30 @@ public class App {
         return new CSVReaderBuilder(reader)
                 .withSkipLines(1)
                 .build();
+    }
+
+    private static List<Address> readAddresses() {
+        List<List<String>> raw = new ArrayList<>();
+        try (CSVReader csvReader = csvReader()) {
+            String[] values = null;
+            while ((values = csvReader.readNext()) != null) {
+                raw.add(Arrays.asList(values));
+            }
+        } catch (IOException exception) {
+            throw new RuntimeException(exception);
+        }
+
+        List<Address> addresses = new ArrayList<>();
+        raw.forEach(item -> {
+            Address address = InitialAddress.builder()
+                    .streetAddress(item.get(0))
+                    .city(item.get(1))
+                    .postalCode(item.get(2))
+                    .build();
+
+            addresses.add(address);
+        });
+
+        return addresses;
     }
 }
