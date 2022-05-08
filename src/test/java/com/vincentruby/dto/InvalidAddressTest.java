@@ -1,7 +1,8 @@
 package com.vincentruby.dto;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class InvalidAddressTest {
 
@@ -9,8 +10,8 @@ public class InvalidAddressTest {
     public void itShouldThrowErrorIfTryingToCallAnyGetters() {
         InvalidAddress address = new InvalidAddress();
 
-        Assertions.assertThrows(Exception.class, address::getCity, "Not Supported");
-        Assertions.assertThrows(Exception.class, address::getPostalCode, "Not Supported");
-        Assertions.assertThrows(Exception.class, address::getStreetAddress, "Not Supported");
+        assertThrows(Exception.class, address::getCity, "Not Supported");
+        assertThrows(Exception.class, address::getPostalCode, "Not Supported");
+        assertThrows(Exception.class, address::getStreetAddress, "Not Supported");
     }
 }
