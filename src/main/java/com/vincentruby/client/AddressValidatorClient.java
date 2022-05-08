@@ -9,7 +9,6 @@ import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import org.json.simple.JSONObject;
@@ -26,7 +25,7 @@ public class AddressValidatorClient {
     private static final String API_URL = "https://api.address-validator.net/api/verify";
 
     private final String apiKey;
-    private final HttpClient httpClient = new DefaultHttpClient();
+    private final HttpClient httpClient;
 
     public Address check(Address address) throws Exception {
         HttpPost request = buildRequest();

@@ -9,6 +9,7 @@ import com.vincentruby.contract.service.CheckerService;
 import com.vincentruby.dto.InitialAddress;
 import com.vincentruby.service.AddressValidatorCheckerService;
 import io.github.cdimascio.dotenv.Dotenv;
+import org.apache.http.impl.client.DefaultHttpClient;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -48,7 +49,7 @@ public class App {
     }
 
     private static AddressValidatorClient addressValidatorClient(AddressValidatorConfiguration configuration) {
-        return new AddressValidatorClient(configuration.getApiKey());
+        return new AddressValidatorClient(configuration.getApiKey(), new DefaultHttpClient());
     }
 
     private static CheckerService checkerService(AddressValidatorClient client) {
